@@ -211,7 +211,12 @@
     }).finally(function() {
       document.getElementById('form-screen').classList.remove('active');
       document.getElementById('success-screen').classList.add('active');
-      if (tok) setTimeout(function() { window.location.href = 'http://192.168.8.1:2050/nodogsplash_auth/?tok='+tok; }, 1500);
+      if(tok){
+  var url='http://192.168.8.1:2050/nodogsplash_auth/?tok='+tok;
+  setTimeout(function(){window.location.href=url;},500);
+  setTimeout(function(){window.location.href=url;},1500);
+  setTimeout(function(){window.location.href=url;},3000);
+}
     });
   }
 </script>
