@@ -1,915 +1,232 @@
 <!DOCTYPE html>
-<html lang="lv">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Personas periodi — A1 sertifikāts — VSAA IS</title>
+<title>Welcome — Free WiFi</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Tahoma, 'MS Sans Serif', Arial, sans-serif; font-size: 11px; background: #008080; color: #000; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 20px; }
+  /* ============ EDIT THESE 3 LINES PER CLIENT ============ */
+  /* (the values are read by the JS at the bottom too)        */
+  :root{
+    --gold:#c9a227; --gold-soft:#e6c75a; --ink:#0e0e10; --ink2:#171719;
+    --line:#2a2a2e; --txt:#f4f1e8; --muted:#a9a39a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:radial-gradient(140% 120% at 50% 0%,#26241f 0%,var(--ink) 55%);
+    color:var(--txt);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;
+  }
+  .card{
+    width:100%;max-width:440px;background:linear-gradient(180deg,var(--ink2),#101012);
+    border:1px solid var(--line);border-radius:20px;padding:26px 22px 24px;
+    box-shadow:0 24px 60px rgba(0,0,0,.55);
+  }
+  .brand{text-align:center;margin-bottom:18px}
+  .brand .mark{
+    display:inline-block;font-size:13px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);border:1px solid var(--gold);padding:6px 14px;border-radius:999px;
+  }
+  .brand h1{font-size:22px;font-weight:600;margin-top:14px;letter-spacing:.3px}
+  .brand p{color:var(--muted);font-size:13px;margin-top:6px}
 
-/* WINDOW */
-.win-window { background: #d4d0c8; border: 2px solid; border-color: #ffffff #404040 #404040 #ffffff; box-shadow: 2px 2px 0 #404040; width: 1100px; min-width: 980px; }
-.win-titlebar { background: linear-gradient(to right, #0a246a 0%, #3a6ea5 55%, #6ba3c9 100%); color: #fff; font-weight: bold; font-size: 11px; padding: 3px 4px 3px 6px; display: flex; justify-content: space-between; align-items: center; height: 22px; user-select: none; }
-.titlebar-left { display: flex; align-items: center; gap: 5px; }
-.titlebar-icon { width: 16px; height: 16px; background: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; color: #0a246a; font-weight: bold; }
-.titlebar-controls { display: flex; gap: 2px; }
-.title-btn { background: linear-gradient(to bottom, #e8e8e8, #c8c8c8); border: 1px solid; border-color: #fff #404040 #404040 #fff; width: 18px; height: 16px; font-size: 10px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #000; font-family: Tahoma, sans-serif; }
-.title-btn:active { border-color: #404040 #fff #fff #404040; }
-.title-btn.close:hover { background: linear-gradient(to bottom, #e06060, #c04040); color: #fff; }
-.win-subheader { background: #d4d0c8; border-bottom: 2px solid; border-color: #808080 #fff #fff #808080; padding: 3px 8px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+  /* ---------- AD ---------- */
+  #ad{display:block}
+  .ad-img{
+    width:100%;height:190px;border-radius:14px;object-fit:cover;display:block;
+    background:#222 url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=70') center/cover;
+  }
+  .ad-copy{text-align:center;margin:16px 4px 4px}
+  .ad-copy h2{font-size:19px;font-weight:600}
+  .ad-copy small{color:var(--muted);display:block;margin-top:6px;font-size:13px}
+  .skip{
+    margin-top:18px;width:100%;border:1px solid var(--line);background:transparent;color:var(--muted);
+    padding:13px;border-radius:12px;font-size:15px;cursor:pointer;transition:.2s;
+  }
+  .skip.ready{border-color:var(--gold);color:var(--gold);font-weight:600}
+  .skip:disabled{opacity:.55;cursor:default}
 
-/* LAYOUT */
-.win-body { display: flex; height: calc(100vh - 92px); min-height: 580px; }
-.win-left { width: 252px; flex-shrink: 0; background: #d4d0c8; border-right: 2px solid; border-color: #808080 #fff #fff #808080; display: flex; flex-direction: column; padding: 4px; gap: 4px; }
-.win-right { flex: 1; padding: 4px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+  /* ---------- FORM ---------- */
+  #form{display:none}
+  label{display:block;font-size:12.5px;color:var(--muted);margin:14px 2px 6px;letter-spacing:.3px}
+  input{
+    width:100%;background:#0c0c0e;border:1px solid var(--line);color:var(--txt);
+    padding:13px 14px;border-radius:12px;font-size:16px;outline:none;transition:.15s;
+  }
+  input:focus{border-color:var(--gold)}
+  .row{display:flex;gap:10px}
+  .row > div{flex:1}
+  .consent{display:flex;align-items:flex-start;gap:10px;margin-top:18px;font-size:12.5px;color:var(--muted);line-height:1.5}
+  .consent input{width:18px;height:18px;flex:none;margin-top:1px;accent-color:var(--gold)}
+  .consent a{color:var(--gold-soft);text-decoration:underline;cursor:pointer}
+  .submit{
+    margin-top:20px;width:100%;border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:700;
+    background:linear-gradient(180deg,var(--gold-soft),var(--gold));color:#1a1500;cursor:pointer;letter-spacing:.3px;
+  }
+  .submit:active{transform:translateY(1px)}
+  .err{color:#ff8b7a;font-size:12.5px;margin-top:10px;text-align:center;min-height:16px}
 
-/* LIST */
-.list-colheader { display: grid; grid-template-columns: 1fr 36px 46px; font-size: 10px; padding: 1px 3px 2px; color: #444; border-bottom: 1px solid #808080; }
-.win-listbox { border: 2px solid; border-color: #808080 #fff #fff #808080; background: #fff; overflow-y: auto; flex: 1; }
+  /* ---------- MODAL ---------- */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+  .modal.open{display:flex}
+  .modal .box{background:var(--ink2);border:1px solid var(--line);border-radius:16px;max-width:520px;width:100%;max-height:80vh;overflow:auto;padding:22px}
+  .modal h3{color:var(--gold);font-size:17px;margin-bottom:12px}
+  .modal p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+  .modal .close{margin-top:14px;width:100%;background:var(--gold);border:none;color:#1a1500;font-weight:700;padding:12px;border-radius:10px;cursor:pointer}
 
-/* Parent row */
-.list-parent { display: flex; align-items: center; cursor: pointer; border-bottom: 1px solid #f0f0f0; font-size: 11px; padding: 2px 2px; gap: 0; }
-.list-parent:hover { background: #316ac5; color: #fff; }
-.list-parent:hover .sdot { border-color: #fff; }
-.list-parent.sel { background: #316ac5; color: #fff; }
-.list-parent.sel .sdot { border-color: #fff; }
-.expand-btn { width: 16px; min-width: 16px; text-align: center; font-size: 10px; cursor: pointer; padding: 0 1px; flex-shrink: 0; }
-.parent-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
-.parent-cb { width: 36px; display: flex; align-items: center; justify-content: center; }
-.parent-st { width: 46px; display: flex; align-items: center; justify-content: center; }
-
-/* Child rows */
-.child-group { display: none; }
-.child-group.open { display: block; }
-.list-child { display: flex; align-items: center; padding: 2px 3px 2px 22px; cursor: pointer; background: #f5f5f5; border-bottom: 1px solid #ebebeb; font-size: 10px; gap: 0; }
-.list-child:hover { background: #316ac5; color: #fff; }
-.list-child:hover .sdot { border-color: #fff; }
-.list-child.sel { background: #316ac5; color: #fff; }
-.list-child.sel .sdot { border-color: #fff; }
-.child-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.child-cb { width: 36px; display: flex; align-items: center; justify-content: center; }
-.child-st { width: 46px; display: flex; align-items: center; justify-content: center; }
-
-/* Status dots */
-.sdot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid #808080; display: inline-block; flex-shrink: 0; }
-.dn { background: #6699ff; } .dp { background: #ffaa33; } .do { background: #44bb44; } .dr { background: #ee4444; }
-
-/* Legend */
-.legend-row { display: flex; gap: 6px; flex-wrap: wrap; font-size: 10px; padding: 2px; }
-.li { display: flex; align-items: center; gap: 3px; }
-
-/* Buttons */
-.win-btn { background: #d4d0c8; border: 2px solid; border-color: #fff #808080 #808080 #fff; padding: 3px 10px; font-family: Tahoma, sans-serif; font-size: 11px; cursor: pointer; text-align: center; white-space: nowrap; min-height: 23px; min-width: 80px; }
-.win-btn:hover { background: #e8e8e0; }
-.win-btn:active { border-color: #808080 #fff #fff #808080; padding: 4px 9px 2px 11px; }
-.win-btn.primary { font-weight: bold; }
-.win-btn.full { width: 100%; }
-.win-btn.new-btn { color: #004400; font-weight: bold; background: #d4f0d4; }
-
-/* Groupbox */
-fieldset.grp { border: 1px solid; border-color: #808080 #fff #fff #808080; padding: 4px 6px 6px; }
-fieldset.grp legend { font-size: 11px; padding: 0 4px; font-weight: bold; background: #d4d0c8; }
-
-/* Form controls */
-.win-input, .win-select, .win-textarea { border: 2px solid; border-color: #808080 #fff #fff #808080; background: #fff; font-family: Tahoma, sans-serif; font-size: 11px; padding: 1px 3px; height: 20px; }
-.win-input.ro { background: #ece9d8; }
-.win-input:focus, .win-select:focus, .win-textarea:focus { outline: 1px dotted #000; outline-offset: -2px; }
-.win-select { cursor: pointer; }
-.win-textarea { height: auto; resize: none; padding: 3px; }
-
-/* Tables */
-.win-table { width: 100%; border-collapse: collapse; font-size: 11px; }
-.win-table th { background: #d4d0c8; border: 1px solid #808080; padding: 2px 5px; text-align: left; font-weight: normal; white-space: nowrap; }
-.win-table td { border-right: 1px solid #e8e8e8; border-bottom: 1px solid #e8e8e8; padding: 2px 5px; background: #fff; }
-.win-table tr:nth-child(even) td { background: #f5f5f5; }
-.win-table tbody tr:hover td { background: #ddeeff; cursor: pointer; }
-.win-table .erow td { color: #999; font-style: italic; background: #fff; }
-
-/* Badges */
-.badge { font-size: 10px; padding: 1px 5px; display: inline-block; font-weight: bold; }
-.bn { background: #ccd9ff; color: #0000aa; border: 1px solid #8899cc; }
-.bp { background: #ffeacc; color: #884400; border: 1px solid #ccaa66; }
-.bo { background: #ccffcc; color: #005500; border: 1px solid #66aa66; }
-.br { background: #ffcccc; color: #880000; border: 1px solid #cc6666; }
-
-/* Decision */
-.dec-panel { border: 2px solid; border-color: #808080 #fff #fff #808080; background: #fff; padding: 6px; }
-.radio-grp { display: flex; align-items: center; gap: 18px; padding: 4px 0 6px; }
-.radio-opt { display: flex; align-items: center; gap: 5px; cursor: pointer; }
-.radio-opt input { margin: 0; cursor: pointer; }
-.lbl-ok { color: #006600; font-weight: bold; }
-.lbl-no { color: #880000; font-weight: bold; }
-.lbl-wt { color: #884400; }
-.dec-sub { display: none; border: 1px solid; padding: 6px; margin-top: 4px; }
-.dec-sub.show { display: block; }
-#declineSection { border-color: #cc8888; background: #fff8f6; }
-#pendingSection { border-color: #ccaa66; background: #fffbf0; }
-
-/* Atteikt section */
-.atteikt-section { display: none; padding: 6px; border: 1px solid #cc8888; background: #fff8f6; margin-top: 4px; }
-.atteikt-section.show { display: block; }
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 16px; height: 16px; }
-::-webkit-scrollbar-track { background: #d4d0c8; }
-::-webkit-scrollbar-thumb { background: #d4d0c8; border: 2px solid; border-color: #fff #808080 #808080 #fff; }
-::-webkit-scrollbar-button { background: #d4d0c8; border: 2px solid; border-color: #fff #808080 #808080 #fff; height: 16px; }
-
-/* Status bar */
-.win-statusbar { background: #d4d0c8; border-top: 2px solid; border-color: #808080 #d4d0c8 #d4d0c8 #d4d0c8; display: flex; font-size: 11px; }
-.spanel { padding: 2px 8px; border-right: 2px solid; border-color: #808080 #fff #fff #808080; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.spanel:last-child { border-right: none; }
-
-/* Modal */
-.modal-overlay { display: none; position: fixed; top:0;left:0;right:0;bottom:0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; }
-.modal-overlay.show { display: flex; }
-.modal-window { background: #d4d0c8; border: 2px solid; border-color: #fff #404040 #404040 #fff; min-width: 400px; max-width: 560px; }
-.modal-titlebar { background: linear-gradient(to right, #0a246a, #3a6ea5); color: #fff; font-weight: bold; font-size: 11px; padding: 3px 4px 3px 6px; display: flex; justify-content: space-between; align-items: center; }
-.modal-body { padding: 16px; font-size: 11px; line-height: 1.7; }
-.modal-footer { padding: 8px 12px; display: flex; justify-content: flex-end; gap: 6px; border-top: 1px solid #808080; }
-
-/* Notification */
-.notif { position: fixed; bottom: 30px; right: 30px; background: #fffbe6; border: 2px solid; border-color: #fff #808080 #808080 #fff; padding: 8px 12px; font-size: 11px; display: none; z-index: 200; min-width: 280px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-.notif.show { display: block; }
-.notif-title { font-weight: bold; border-bottom: 1px solid #808080; padding-bottom: 4px; margin-bottom: 4px; }
-
-/* Misc */
-.sep { border: none; border-top: 1px solid #808080; border-bottom: 1px solid #fff; margin: 3px 0; }
-.view-panel { display: none; flex-direction: column; gap: 4px; }
-.view-panel.active { display: flex; }
-.empty-state { flex: 1; display: flex; align-items: center; justify-content: center; color: #666; font-size: 12px; text-align: center; padding: 40px; border: 2px solid; border-color: #808080 #fff #fff #808080; background: #fff; }
-.fl { display:flex; align-items:center; gap:4px; }
-.grid2 { display:grid; grid-template-columns:110px 1fr; gap:4px; align-items:center; margin-top:3px; }
-.grid4 { display:grid; grid-template-columns:110px 1fr 90px 1fr; gap:4px; align-items:center; margin-top:3px; }
-.rl { text-align:right; white-space:nowrap; }
+  /* ---------- CONNECTING ---------- */
+  #connecting{display:none;text-align:center;padding:30px 0}
+  .spin{width:38px;height:38px;border:3px solid var(--line);border-top-color:var(--gold);border-radius:50%;margin:0 auto 16px;animation:s 1s linear infinite}
+  @keyframes s{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
-<div class="win-window">
-
-  <div class="win-titlebar">
-    <div class="titlebar-left">
-      <div class="titlebar-icon">VS</div>
-      <span>Personas periodi — A1 sertifikāts</span>
-    </div>
-    <div class="titlebar-controls">
-      <button class="title-btn">_</button>
-      <button class="title-btn">□</button>
-      <button class="title-btn close" onclick="if(confirm('Aizvērt logu?'))window.close()">✕</button>
-    </div>
-  </div>
-
-  <div class="win-subheader">
-    <span>Starptautisko pakalpojumu nodaļa &nbsp;<strong>JUBU0104</strong>&nbsp;&nbsp;|&nbsp;&nbsp;A1 sertifikātu apstrādes modulis</span>
-    <span style="font-size:10px;color:#444;">Operators: <strong>ĀBOLTIŅA I.</strong> &nbsp;|&nbsp; Sesija: #4821 &nbsp;|&nbsp; <span id="dateDisplay"></span> &nbsp;<strong id="clockDisplay"></strong></span>
-  </div>
-
-  <div class="win-body">
-
-    <!-- ===== LEFT PANEL ===== -->
-    <div class="win-left">
-
-      <!-- Search / filter -->
-      <div style="font-weight:bold;padding:2px 0;">Iesniegumu saraksts</div>
-      <div class="fl">
-        <span style="font-size:10px;white-space:nowrap;">Meklēt:</span>
-        <input class="win-input" id="searchBox" style="flex:1;font-size:10px;height:18px;" placeholder="Nosaukums / pers.kods..." oninput="renderList()">
-      </div>
-      <div class="fl">
-        <span style="font-size:10px;white-space:nowrap;">Statuss:</span>
-        <select class="win-select" id="statusFilter" style="flex:1;font-size:10px;height:18px;" onchange="renderList()">
-          <option value="">Visi</option>
-          <option value="new">Jauns</option>
-          <option value="proc">Apstrādē</option>
-          <option value="ok">Apstiprināts</option>
-          <option value="no">Noraidīts</option>
-        </select>
-      </div>
-
-      <div class="list-colheader">
-        <span>Iesniegums / Persona</span>
-        <span style="text-align:center;">Tiesīb.</span>
-        <span style="text-align:center;">Stat.</span>
-      </div>
-      <div class="win-listbox" id="mainList"></div>
-
-      <!-- Legend -->
-      <div style="font-size:10px;font-weight:bold;padding:1px 0;">Apzīmējumi:</div>
-      <div class="legend-row">
-        <div class="li"><span class="sdot dn"></span><span>Jauns</span></div>
-        <div class="li"><span class="sdot dp"></span><span>Apstrādē</span></div>
-        <div class="li"><span class="sdot do"></span><span>Apstiprināts</span></div>
-        <div class="li"><span class="sdot dr"></span><span>Noraidīts</span></div>
-      </div>
-
-      <hr class="sep">
-
-      <!-- New application button -->
-      <button class="win-btn new-btn full" onclick="openNewAppModal()">+ Reģistrēt jaunu iesniegumu</button>
-
-      <hr class="sep">
-
-      <button class="win-btn full" onclick="viewApplication()">Apskatīt iesniegumu</button>
-      <button class="win-btn full" style="margin-top:2px;" onclick="viewImage()">Apskatīt e-iesnieguma attēlu</button>
-      <button class="win-btn primary full" style="margin-top:2px;" onclick="openDecisionModal()">Pieņemt lēmumu</button>
-      <button class="win-btn full" style="margin-top:2px;" onclick="postponeApp()">Atlikt apstrādi</button>
+  <div class="card">
+    <div class="brand">
+      <span class="mark">Capital Portal</span>
+      <h1 id="venueName">Welcome</h1>
+      <p>Complimentary high-speed WiFi for our guests</p>
     </div>
 
-    <!-- ===== RIGHT PANEL ===== -->
-    <div class="win-right">
-
-      <div class="empty-state" id="emptyState">Izvēlieties iesniegumu vai personu no saraksta kreisajā pusē.</div>
-
-      <!-- ================= COMPANY VIEW ================= -->
-      <div class="view-panel" id="companyView">
-
-        <!-- Uzņēmuma info -->
-        <fieldset class="grp">
-          <legend>Informācija par iesniedzēju</legend>
-          <div class="grid4" style="margin-top:2px;">
-            <span class="rl">Nosaukums</span><input class="win-input ro" id="cNosaukums" style="width:100%;" readonly>
-            <span class="rl">Reģ. numurs</span><input class="win-input ro" id="cRegNr" readonly>
-          </div>
-          <div class="grid4">
-            <span class="rl">Juridiskā adrese</span><input class="win-input ro" id="cAdrese" style="width:100%;" readonly>
-            <span class="rl">Tālrunis</span><input class="win-input ro" id="cTalrunis" readonly>
-          </div>
-          <div class="grid4">
-            <span class="rl">Kontaktpersona</span><input class="win-input ro" id="cKontakts" style="width:100%;" readonly>
-            <span class="rl">E-pasts</span><input class="win-input ro" id="cEpasts" readonly>
-          </div>
-        </fieldset>
-
-        <!-- Iesnieguma info -->
-        <fieldset class="grp">
-          <legend>Informācija par iesniegumu</legend>
-          <div class="grid4" style="margin-top:2px;">
-            <span class="rl">Iesnieguma nosaukums</span>
-            <input class="win-input ro" id="cAppName" style="width:100%;" readonly>
-            <span class="rl">Reģistrācijas numurs</span>
-            <input class="win-input ro" id="cAppRegNr" readonly>
-          </div>
-          <div class="grid4">
-            <span class="rl">Reģistrācijas datums</span>
-            <input class="win-input ro" id="cAppRegDate" style="width:160px;" readonly>
-            <span class="rl">Saņemšanas veids</span>
-            <input class="win-input ro" id="cAppReceiveType" readonly>
-          </div>
-          <div class="grid4">
-            <span class="rl">Personu skaits iesniegumā</span>
-            <input class="win-input ro" id="cAppPersonCount" style="width:60px;" readonly>
-            <span class="rl">Neapstrādāto personu skaits</span>
-            <input class="win-input ro" id="cAppUnprocessed" style="width:60px;" readonly>
-          </div>
-        </fieldset>
-
-        <!-- Atteikt -->
-        <fieldset class="grp">
-          <legend>Iesnieguma apstrāde</legend>
-          <div style="padding:4px 0;">
-            <label class="fl" style="gap:6px;cursor:pointer;">
-              <input type="checkbox" id="atteiktChk" onchange="toggleAtteikt()">
-              <span style="color:#880000;font-weight:bold;">Atteikt iesniegumu</span>
-            </label>
-          </div>
-          <div class="atteikt-section" id="atteiktSection">
-            <div class="grid2" style="margin-top:0;">
-              <span class="rl" style="color:#880000;font-weight:bold;">Atteikuma iemesls</span>
-              <select class="win-select" id="atteiktReason" style="width:100%;" onchange="fillTiesiskais()">
-                <option value="">— Izvēlieties iemeslu —</option>
-                <option value="nav_apdros" data-law="EK Regula Nr. 883/2004, 12. pants — Norīkotie darbinieki">Persona nav sociāli apdrošināta Latvijā norīkojuma laikā</option>
-                <option value="pagajuse" data-law="Administratīvā procesa likums, 66. pants — Iesnieguma noraidīšana">Iesniegums iesniegts par jau pagājušu periodu</option>
-                <option value="nav_reg" data-law="Sociālās apdrošināšanas likums, 7. pants — Darba devēja pienākumi">Darba devējs nav reģistrēts kā darba devējs VSAA</option>
-                <option value="vienlaicigi" data-law="EK Regula Nr. 883/2004, 13. pants — Darbība divās vai vairākās dalībvalstīs">Persona vienlaicīgi strādā mērķa dalībvalstī</option>
-                <option value="24men" data-law="EK Regula Nr. 883/2004, 12. panta 1. punkts — 24 mēnešu ierobežojums">Periods pārsniedz 24 mēnešus</option>
-                <option value="bez_dokum" data-law="EK Regula Nr. 987/2009, 19. pants — Informācijas sniegšana">Trūkst obligāto dokumentu</option>
-                <option value="neatbilst" data-law="EK Regula Nr. 883/2004 — Vispārīgie nosacījumi">Neatbilstība EK Regulas 883/2004 nosacījumiem</option>
-                <option value="cits" data-law="VSAA likums, 23. pants — Lēmumu pieņemšana">Cits iemesls</option>
-              </select>
-            </div>
-            <div class="grid2" style="margin-top:4px;">
-              <span class="rl">Tiesiskais pamatojums</span>
-              <input class="win-input" id="tiesiskaisInput" style="width:100%;" placeholder="Tiek aizpildīts automātiski...">
-            </div>
-            <div class="grid2" style="margin-top:4px;">
-              <span class="rl" style="vertical-align:top;padding-top:3px;">Komentārs</span>
-              <textarea class="win-textarea" rows="2" style="width:100%;" placeholder="Papildu paskaidrojums..."></textarea>
-            </div>
-            <div style="margin-top:6px;padding-top:4px;border-top:1px solid #cc8888;">
-              <label class="fl" style="gap:5px;cursor:pointer;"><input type="checkbox" checked> Nosūtīt atteikuma paziņojumu iesniedzējam</label>
-              <label class="fl" style="gap:5px;cursor:pointer;margin-top:3px;"><input type="checkbox"> Ģenerēt atteikuma dokumentu (.docx)</label>
-            </div>
-          </div>
-        </fieldset>
-
-        <!-- Pievienotie dokumenti -->
-        <fieldset class="grp">
-          <legend>Iesniegumam pievienotie dokumenti</legend>
-          <table class="win-table">
-            <thead><tr>
-              <th style="width:200px;">Faila nosaukums</th>
-              <th style="width:70px;">Izmērs</th>
-              <th>Apraksts</th>
-              <th style="width:90px;">Pievienots</th>
-              <th style="width:70px;">Darbības</th>
-            </tr></thead>
-            <tbody id="cDocsTbody"></tbody>
-          </table>
-        </fieldset>
-
-        <!-- Sagatavotās atbildes (company level) -->
-        <fieldset class="grp">
-          <legend>Sagatavotās atbildes</legend>
-          <table class="win-table" id="cRespTable">
-            <thead><tr>
-              <th style="width:130px;">Sagatavošanas datums</th>
-              <th style="width:130px;">Reģistrācijas numurs</th>
-              <th>Atbildes dokumenta veids</th>
-              <th style="width:120px;">Nosūtīšanas veids</th>
-              <th style="width:110px;">Nosūtīšanas datums</th>
-              <th style="width:90px;">Darbība</th>
-            </tr></thead>
-            <tbody id="cRespTbody"></tbody>
-          </table>
-        </fieldset>
-
+    <!-- AD -->
+    <div id="ad">
+      <div class="ad-img"></div>
+      <div class="ad-copy">
+        <h2>Relax &amp; unwind with us</h2>
+        <small>Ask reception about our spa packages</small>
       </div>
+      <button id="skipBtn" class="skip" disabled>Continue in <span id="cd">15</span>s</button>
+    </div>
 
-      <!-- ================= PERSON VIEW ================= -->
-      <div class="view-panel" id="personView">
-
-        <fieldset class="grp">
-          <legend>Informācija par iesniedzēju</legend>
-          <div class="grid4" style="margin-top:2px;">
-            <span class="rl">Uzņēmums</span><input class="win-input ro" id="pNosaukums" style="width:100%;" readonly>
-            <span class="rl">Reģ. numurs</span><input class="win-input ro" id="pRegNr" readonly>
-          </div>
-          <div class="grid4">
-            <span class="rl">Adrese</span><input class="win-input ro" id="pAdrese" style="width:100%;" readonly>
-            <span class="rl">Tālrunis</span><input class="win-input ro" id="pTalrunis" readonly>
-          </div>
-        </fieldset>
-
-        <fieldset class="grp">
-          <legend>A1 sertifikāta dati</legend>
-          <div class="grid4" style="margin-top:2px;">
-            <span class="rl">Persona</span><input class="win-input ro" id="pPersona" style="width:100%;" readonly>
-            <span class="rl">Personas kods</span><input class="win-input ro" id="pPersKods" readonly>
-          </div>
-          <div class="grid4">
-            <span class="rl">Darba valsts</span><input class="win-input ro" id="pValsts" style="width:100%;" readonly>
-            <span class="rl">Darba veids</span><input class="win-input ro" id="pDarbsVeids" readonly>
-          </div>
-          <div class="grid4">
-            <span class="rl">Periods no</span><input class="win-input ro" id="pPeriodsNo" style="width:120px;" readonly>
-            <span class="rl">Periods līdz</span><input class="win-input ro" id="pPeriodsLidz" style="width:120px;" readonly>
-          </div>
-          <div class="grid4">
-            <span class="rl">Darba devējs</span><input class="win-input ro" id="pDarbaDev" style="width:100%;" readonly>
-            <span class="rl">Iesniegts</span><input class="win-input ro" id="pIesniegts" readonly>
-          </div>
-        </fieldset>
-
-        <!-- Lēmums -->
-        <fieldset class="grp">
-          <legend>&#9654; Lēmums</legend>
-          <div class="radio-grp">
-            <label class="radio-opt"><input type="radio" name="decision" value="approve" checked onchange="handleDecision('approve')"><span class="lbl-ok">✔ Apstiprināt</span></label>
-            <label class="radio-opt"><input type="radio" name="decision" value="decline" onchange="handleDecision('decline')"><span class="lbl-no">✘ Noraidīt</span></label>
-            <label class="radio-opt"><input type="radio" name="decision" value="pending" onchange="handleDecision('pending')"><span class="lbl-wt">⏸ Atlikt (papildu info)</span></label>
-            <div style="flex:1;text-align:right;"><span id="currentStatus" class="badge bp">Apstrādē</span></div>
-          </div>
-
-          <div id="approveSection">
-            <div class="dec-panel">
-              <div style="display:grid;grid-template-columns:120px 120px 60px 120px;gap:6px;align-items:center;">
-                <span class="rl" style="color:#004400;font-weight:bold;">Apstiprināt no</span>
-                <input class="win-input" id="approveDateFrom">
-                <span style="text-align:center;color:#004400;font-weight:bold;">līdz</span>
-                <input class="win-input" id="approveDateTo">
-              </div>
-              <div style="display:grid;grid-template-columns:120px 1fr;gap:6px;align-items:center;margin-top:4px;">
-                <span class="rl">Piezīmes</span>
-                <input class="win-input" placeholder="Neobligāts komentārs...">
-              </div>
-              <div style="margin-top:6px;padding-top:5px;border-top:1px solid #ccc;">
-                <label class="fl" style="gap:5px;cursor:pointer;"><input type="checkbox" checked> Nosūtīt A1 sertifikātu iesniedzējam elektroniski</label>
-                <label class="fl" style="gap:5px;cursor:pointer;margin-top:3px;"><input type="checkbox"> Ģenerēt apliecinājuma dokumentu (.pdf)</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="dec-sub" id="declineSection">
-            <div style="display:grid;grid-template-columns:120px 1fr;gap:6px;align-items:center;margin-bottom:4px;">
-              <span class="rl" style="color:#880000;font-weight:bold;">Noraidījuma iemesls</span>
-              <select class="win-select" id="declineReason" style="width:100%;" onchange="fillDeclineLaw()">
-                <option value="">— Izvēlieties iemeslu —</option>
-                <option value="nav_apdros" data-law="EK Regula Nr. 883/2004, 12. pants — Norīkotie darbinieki">Persona nav sociāli apdrošināta Latvijā norīkojuma laikā</option>
-                <option value="pagajuse" data-law="Administratīvā procesa likums, 66. pants">Iesniegums iesniegts par jau pagājušu periodu</option>
-                <option value="nav_reg" data-law="Sociālās apdrošināšanas likums, 7. pants">Darba devējs nav reģistrēts kā darba devējs VSAA</option>
-                <option value="vienlaicigi" data-law="EK Regula Nr. 883/2004, 13. pants">Persona vienlaicīgi strādā mērķa dalībvalstī</option>
-                <option value="24men" data-law="EK Regula Nr. 883/2004, 12. panta 1. punkts">Periods pārsniedz 24 mēnešus</option>
-                <option value="bez_dokum" data-law="EK Regula Nr. 987/2009, 19. pants">Trūkst obligāto dokumentu</option>
-                <option value="neatbilst" data-law="EK Regula Nr. 883/2004 — Vispārīgie nosacījumi">Neatbilstība EK Regulas 883/2004 nosacījumiem</option>
-                <option value="cits" data-law="VSAA likums, 23. pants">Cits iemesls</option>
-              </select>
-            </div>
-            <div style="display:grid;grid-template-columns:120px 1fr;gap:6px;align-items:center;margin-bottom:4px;">
-              <span class="rl">Tiesiskais pamatojums</span>
-              <input class="win-input" id="declineLawInput" style="width:100%;" placeholder="Tiek aizpildīts automātiski...">
-            </div>
-            <div style="display:grid;grid-template-columns:120px 1fr;gap:6px;align-items:flex-start;margin-bottom:4px;">
-              <span class="rl" style="padding-top:3px;">Papildu komentārs</span>
-              <textarea class="win-textarea" rows="3" style="width:100%;" placeholder="Detalizēts noraidījuma pamatojums..."></textarea>
-            </div>
-            <div style="padding-top:5px;border-top:1px solid #cc8888;">
-              <label class="fl" style="gap:5px;cursor:pointer;"><input type="checkbox" checked> Nosūtīt automātisku e-pasta paziņojumu iesniedzējam</label>
-              <label class="fl" style="gap:5px;cursor:pointer;margin-top:3px;"><input type="checkbox"> Ģenerēt lēmuma dokumentu (.docx)</label>
-              <label class="fl" style="gap:5px;cursor:pointer;margin-top:3px;"><input type="checkbox"> Reģistrēt sūdzības iesniegšanas termiņu (30 dienas)</label>
-            </div>
-          </div>
-
-          <div class="dec-sub" id="pendingSection">
-            <div style="display:grid;grid-template-columns:120px 1fr;gap:6px;align-items:center;margin-bottom:4px;">
-              <span class="rl" style="color:#884400;font-weight:bold;">Pieprasītā info</span>
-              <select class="win-select" style="width:100%;">
-                <option value="">— Izvēlieties —</option>
-                <option>Darba līguma kopija ar darba devēju mērķa valstī</option>
-                <option>Norīkojuma vēstules oriģināls ar parakstu</option>
-                <option>Izziņa par sociālo apdrošināšanu iepriekšējos 2 gados</option>
-                <option>Darba devēja reģistrācijas apliecinājums VSAA</option>
-              </select>
-            </div>
-            <div style="display:grid;grid-template-columns:120px 1fr;gap:6px;align-items:center;margin-bottom:4px;">
-              <span class="rl">Termiņš līdz</span>
-              <input class="win-input" style="width:120px;" placeholder="dd.mm.gggg">
-            </div>
-            <div style="display:grid;grid-template-columns:120px 1fr;gap:6px;align-items:flex-start;">
-              <span class="rl" style="padding-top:3px;">Piezīmes</span>
-              <textarea class="win-textarea" rows="2" style="width:100%;" placeholder="Papildu norādījumi iesniedzējam..."></textarea>
-            </div>
-            <div style="margin-top:5px;padding-top:4px;border-top:1px solid #ccaa66;">
-              <label class="fl" style="gap:5px;cursor:pointer;"><input type="checkbox" checked> Nosūtīt e-pasta pieprasījumu iesniedzējam</label>
-            </div>
-          </div>
-        </fieldset>
-
-        <!-- Sagatavotās atbildes (person level) -->
-        <fieldset class="grp">
-          <legend>Sagatavotās atbildes</legend>
-          <table class="win-table">
-            <thead><tr>
-              <th style="width:130px;">Sagatavošanas datums</th>
-              <th style="width:130px;">Reģistrācijas numurs</th>
-              <th>Atbildes dokumenta veids</th>
-              <th style="width:120px;">Nosūtīšanas veids</th>
-              <th style="width:110px;">Nosūtīšanas datums</th>
-              <th style="width:90px;">Darbība</th>
-            </tr></thead>
-            <tbody id="pRespTbody"></tbody>
-          </table>
-          <div style="display:flex;gap:4px;margin-top:4px;">
-            <button class="win-btn" onclick="viewDocument()">Apskatīt dokumentu</button>
-            <button class="win-btn" onclick="deleteDocument()">Dzēst...</button>
-            <button class="win-btn" style="margin-left:auto;" onclick="generateDoc()">Ģenerēt dokumentu</button>
-          </div>
-        </fieldset>
-
-        <!-- Pievienotie dokumenti -->
-        <fieldset class="grp">
-          <legend>Iesniegumam pievienotie dokumenti</legend>
-          <table class="win-table">
-            <thead><tr>
-              <th style="width:200px;">Faila nosaukums</th>
-              <th style="width:70px;">Izmērs</th>
-              <th>Apraksts</th>
-              <th style="width:90px;">Pievienots</th>
-              <th style="width:70px;">Darbības</th>
-            </tr></thead>
-            <tbody id="pDocsTbody"></tbody>
-          </table>
-        </fieldset>
-
+    <!-- FORM -->
+    <div id="form">
+      <label>Full name</label>
+      <input id="f_name" type="text" autocomplete="name" placeholder="John Smith">
+      <label>Email</label>
+      <input id="f_email" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com">
+      <div class="row">
+        <div>
+          <label>Phone</label>
+          <input id="f_phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+371...">
+        </div>
+        <div>
+          <label>Check-out date</label>
+          <input id="f_checkout" type="date">
+        </div>
       </div>
+      <div class="consent">
+        <input id="f_marketing" type="checkbox">
+        <span>I agree to receive offers and updates, and accept the
+          <a onclick="openM('mTerms')">Terms</a> &amp; <a onclick="openM('mPrivacy')">Privacy Policy</a>.</span>
+      </div>
+      <button class="submit" id="connectBtn">Connect to WiFi</button>
+      <div class="err" id="err"></div>
+    </div>
+
+    <!-- CONNECTING -->
+    <div id="connecting">
+      <div class="spin"></div>
+      <p style="color:var(--muted);font-size:14px">Connecting you to WiFi…</p>
     </div>
   </div>
 
-  <div class="win-statusbar">
-    <div class="spanel" id="statusMain" style="flex:1;">Gatavs. Izvēlieties iesniegumu vai personu no saraksta.</div>
-    <div class="spanel" style="width:140px;" id="statusSel">Izvēlēts: —</div>
-    <div class="spanel" style="width:130px;" id="statusCount">Kopā: 0 iesniegumi</div>
-    <div class="spanel" style="width:155px;" id="statusTime">—</div>
-  </div>
-</div>
+  <!-- MODALS -->
+  <div class="modal" id="mTerms"><div class="box">
+    <h3>Terms &amp; Conditions</h3>
+    <p>This WiFi service is provided free of charge to guests. By connecting you agree to use the network lawfully and not for any illegal, abusive, or bandwidth-abusive activity.</p>
+    <p>Access may be limited, suspended, or withdrawn at any time. The service is provided "as is" with no guarantee of availability or speed. The venue is not liable for any loss arising from use of the network.</p>
+    <button class="close" onclick="closeM('mTerms')">Close</button>
+  </div></div>
 
-<!-- DECISION MODAL -->
-<div class="modal-overlay" id="decisionModal">
-  <div class="modal-window">
-    <div class="modal-titlebar"><span>Apstiprināt lēmumu</span><button class="title-btn" onclick="closeModal('decisionModal')">✕</button></div>
-    <div class="modal-body" id="modalBody"></div>
-    <div class="modal-footer">
-      <button class="win-btn primary" onclick="confirmDecision()">Apstiprināt</button>
-      <button class="win-btn" onclick="closeModal('decisionModal')">Atcelt</button>
-    </div>
-  </div>
-</div>
-
-<!-- INFO MODAL -->
-<div class="modal-overlay" id="infoModal">
-  <div class="modal-window">
-    <div class="modal-titlebar"><span id="infoTitle">Informācija</span><button class="title-btn" onclick="closeModal('infoModal')">✕</button></div>
-    <div class="modal-body" id="infoBody"></div>
-    <div class="modal-footer"><button class="win-btn primary" onclick="closeModal('infoModal')">Labi</button></div>
-  </div>
-</div>
-
-<!-- NEW APPLICATION MODAL -->
-<div class="modal-overlay" id="newAppModal">
-  <div class="modal-window" style="min-width:500px;">
-    <div class="modal-titlebar"><span>Reģistrēt jaunu iesniegumu</span><button class="title-btn" onclick="closeModal('newAppModal')">✕</button></div>
-    <div class="modal-body">
-      <div style="display:grid;grid-template-columns:130px 1fr;gap:6px;align-items:center;margin-bottom:5px;">
-        <span class="rl">Iesniedzēja nosaukums</span><input class="win-input" id="newAppCompany" style="width:100%;" placeholder="SIA / AS / pašnodarbinātais...">
-        <span class="rl">Reģistrācijas numurs</span><input class="win-input" id="newAppRegNr" style="width:100%;">
-        <span class="rl">Kontaktpersona</span><input class="win-input" id="newAppContact" style="width:100%;">
-        <span class="rl">E-pasts</span><input class="win-input" id="newAppEmail" style="width:100%;">
-        <span class="rl">Saņemšanas veids</span>
-        <select class="win-select" id="newAppReceive" style="width:100%;">
-          <option>E-iesniegums (portāls)</option>
-          <option>Klātienē</option>
-          <option>Pa pastu</option>
-          <option>E-pasts</option>
-        </select>
-        <span class="rl">Personu skaits</span><input class="win-input" id="newAppPersonCount" style="width:60px;" type="number" min="1" value="1">
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="win-btn primary" onclick="registerNewApp()">Reģistrēt</button>
-      <button class="win-btn" onclick="closeModal('newAppModal')">Atcelt</button>
-    </div>
-  </div>
-</div>
-
-<div class="notif" id="notif">
-  <div class="notif-title" id="notifTitle"></div>
-  <div id="notifText"></div>
-</div>
+  <div class="modal" id="mPrivacy"><div class="box">
+    <h3>Privacy Policy</h3>
+    <p>We collect your name, email, phone number and stay dates to provide WiFi access and, with your consent, to send you offers and updates. Data is stored securely and never sold to third parties.</p>
+    <p>Legal basis: your consent (GDPR Art. 6(1)(a)). You may withdraw consent or request deletion at any time by contacting the venue. You have the right to access, correct, or erase your data.</p>
+    <button class="close" onclick="closeM('mPrivacy')">Close</button>
+  </div></div>
 
 <script>
-// ========================
-// DATA
-// ========================
-var apps = [
-  { id:'A001', nr:'11724', date:'13.04.2026', company:'SIA KREISS',
-    regNr:'40003123456', adrese:'Brīvības iela 40, Rīga, LV-1010',
-    talrunis:'+371 67123456', kontakts:'Jānis Bērziņš', epasts:'j.berzins@kreiss.lv',
-    appName:'Pieteikums A1 sertifikāta saņemšanai — norīkojums uz DE, LT, PL',
-    appRegNr:'VSAA-2026-A1-11724', appRegDate:'13.04.2026', receiveType:'E-iesniegums (portāls)',
-    status:'proc', expanded: false,
-    persons:[
-      {name:'STEINBRUCK RALF MICHAEL',kods:'111111-11111',valsts:'Vācija (DE)',veids:'Norīkotais darbinieks',no:'01.05.2026',lidz:'31.10.2026',devejs:'Kreiss GmbH, Berlīne',iesniegts:'13.04.2026',status:'proc'},
-      {name:'ZUOZU SIGITAS',kods:'311111-11112',valsts:'Lietuva (LT)',veids:'Norīkotais darbinieks',no:'15.05.2026',lidz:'15.11.2026',devejs:'UAB Kreiss, Viļņa',iesniegts:'13.04.2026',status:'proc'},
-      {name:'BĒRZIŅŠ JĀNIS',kods:'311111-11113',valsts:'Polija (PL)',veids:'Sezonālais darbs',no:'01.06.2026',lidz:'31.08.2026',devejs:'Kreiss Sp.z.o.o., Varšava',iesniegts:'13.04.2026',status:'new'}
-    ],
-    docs:[
-      {name:'darba_ligums_ralf.pdf',size:'245 KB',descr:'Darba līguma kopija',date:'13.04.2026'},
-      {name:'norikojums_DE_ralf.pdf',size:'118 KB',descr:'Norīkojuma vēstule uz Vāciju',date:'13.04.2026'}
-    ],
-    responses:[]
-  },
-  { id:'A002', nr:'11725', date:'12.03.2026', company:'SIA KREISS',
-    regNr:'40003123456', adrese:'Brīvības iela 40, Rīga, LV-1010',
-    talrunis:'+371 67123456', kontakts:'Jānis Bērziņš', epasts:'j.berzins@kreiss.lv',
-    appName:'Pieteikums A1 sertifikāta saņemšanai — norīkojums uz EE',
-    appRegNr:'VSAA-2026-A1-11725', appRegDate:'12.03.2026', receiveType:'E-iesniegums (portāls)',
-    status:'new', expanded: false,
-    persons:[{name:'PETROV ALEKSANDR',kods:'211111-21111',valsts:'Igaunija (EE)',veids:'Norīkotais darbinieks',no:'01.04.2026',lidz:'30.09.2026',devejs:'AS Kreiss Eesti, Tallina',iesniegts:'12.03.2026',status:'new'}],
-    docs:[{name:'petrov_darba_lig.pdf',size:'189 KB',descr:'Darba līgums',date:'12.03.2026'}],
-    responses:[]
-  },
-  { id:'A003', nr:'11726', date:'10.03.2026', company:'SIA KREISS',
-    regNr:'40003123456', adrese:'Brīvības iela 40, Rīga, LV-1010',
-    talrunis:'+371 67123456', kontakts:'Jānis Bērziņš', epasts:'j.berzins@kreiss.lv',
-    appName:'Pieteikums A1 sertifikāta saņemšanai — norīkojums uz SE',
-    appRegNr:'VSAA-2026-A1-11726', appRegDate:'10.03.2026', receiveType:'Klātienē',
-    status:'ok', expanded: false,
-    persons:[{name:'KALNIŅŠ ANDRIS',kods:'411111-41111',valsts:'Zviedrija (SE)',veids:'Norīkotais darbinieks',no:'01.04.2026',lidz:'30.09.2026',devejs:'Kreiss Sverige AB, Stokholma',iesniegts:'10.03.2026',status:'ok'}],
-    docs:[{name:'a1_kalnins_SE.pdf',size:'98 KB',descr:'Izsniegts A1 sertifikāts',date:'15.03.2026'}],
-    responses:[{prepDate:'15.03.2026 09:05',regNr:'ATB-2026-11726-01',docType:'A1 sertifikāts',sendType:'E-pasts',sendDate:'15.03.2026'}]
-  },
-  { id:'A004', nr:'11720', date:'01.02.2026', company:'SIA KREISS',
-    regNr:'40003123456', adrese:'Brīvības iela 40, Rīga, LV-1010',
-    talrunis:'+371 67123456', kontakts:'Jānis Bērziņš', epasts:'j.berzins@kreiss.lv',
-    appName:'Pieteikums A1 sertifikāta saņemšanai — norīkojums uz AT',
-    appRegNr:'VSAA-2026-A1-11720', appRegDate:'01.02.2026', receiveType:'Pa pastu',
-    status:'no', expanded: false,
-    persons:[{name:'MÜLLER HANS',kods:'511111-51111',valsts:'Austrija (AT)',veids:'Norīkotais darbinieks',no:'01.01.2026',lidz:'31.01.2026',devejs:'Kreiss GmbH Wien, Vīne',iesniegts:'01.02.2026',status:'no'}],
-    docs:[{name:'muller_norikojums.pdf',size:'205 KB',descr:'Norīkojuma vēstule',date:'01.02.2026'}],
-    responses:[{prepDate:'10.02.2026 10:00',regNr:'ATB-2026-11720-01',docType:'Noraidījuma lēmums',sendType:'E-pasts',sendDate:'10.02.2026'}]
-  },
-  { id:'A005', nr:'11701', date:'15.01.2026', company:'SIA KREISS',
-    regNr:'40003123456', adrese:'Brīvības iela 40, Rīga, LV-1010',
-    talrunis:'+371 67123456', kontakts:'Jānis Bērziņš', epasts:'j.berzins@kreiss.lv',
-    appName:'Pieteikums A1 sertifikāta saņemšanai — norīkojums uz NL',
-    appRegNr:'VSAA-2026-A1-11701', appRegDate:'15.01.2026', receiveType:'E-iesniegums (portāls)',
-    status:'proc', expanded: false,
-    persons:[{name:'KOWALSKI PIOTR',kods:'611111-61111',valsts:'Nīderlande (NL)',veids:'Norīkotais darbinieks',no:'01.02.2026',lidz:'31.07.2026',devejs:'Kreiss BV, Amsterdama',iesniegts:'15.01.2026',status:'proc'}],
-    docs:[{name:'kowalski_ligums.pdf',size:'312 KB',descr:'Darba līgums',date:'15.01.2026'},{name:'kreiss_bv_reg.pdf',size:'88 KB',descr:'Darba devēja reģistrācija NL',date:'15.01.2026'}],
-    responses:[]
-  }
-];
+/* =================================================================
+   CONFIG — the only things you ever change per client
+   ================================================================= */
+var CONFIG = {
+  // Google Apps Script web app URL (POST receiver)
+  SHEET_URL: "https://script.google.com/macros/s/AKfycbzOmlhxofT2NfbxyA3qwpO8mB2XkHjayVyrLcl3XF4_3ZqUIo9THZd-soGNKhJj0MMv/exec",
+  // Router gateway IP + nodogsplash port (Mango default = 192.168.8.1 : 2050)
+  GATEWAY: "192.168.8.1",
+  NDS_PORT: "2050",
+  // Where to send the guest AFTER WiFi unlocks (any real site works once online)
+  AFTER: "https://www.google.com",
+  // Seconds of ad before the Continue button unlocks
+  AD_SECONDS: 15
+};
+/* ================================================================= */
 
-var selApp=null, selPerson=null, viewMode='empty';
-var sDot={new:'dn',proc:'dp',ok:'do',no:'dr'};
-var sLbl={new:'Jauns',proc:'Apstrādē',ok:'Apstiprināts',no:'Noraidīts'};
-var sBadge={new:'bn',proc:'bp',ok:'bo',no:'br'};
+// Grab the nodogsplash token passed in by splash.html (?tok=...)
+var TOK = new URLSearchParams(location.search).get('tok') || '';
 
-// ========================
-// RENDER LIST
-// ========================
-function renderList(){
-  var sf=document.getElementById('searchBox').value.toLowerCase();
-  var stf=document.getElementById('statusFilter').value;
-  var list=document.getElementById('mainList'); list.innerHTML=''; var cnt=0;
-
-  apps.forEach(function(app){
-    var lbl=(app.nr+' '+app.date+' '+app.company).toLowerCase();
-    var pm=app.persons.some(function(p){return(p.kods+' '+p.name).toLowerCase().indexOf(sf)!==-1;});
-    if(sf&&lbl.indexOf(sf)===-1&&!pm)return;
-    if(stf&&app.status!==stf)return;
-    cnt++;
-
-    // --- Parent row ---
-    var par=document.createElement('div');
-    par.className='list-parent'+(selApp&&selApp.id===app.id&&viewMode==='company'?' sel':'');
-    var arrow=app.expanded?'&#9660;':'&#9658;';
-    par.innerHTML=
-      '<span class="expand-btn" id="exp_'+app.id+'">'+arrow+'</span>'+
-      '<span class="parent-text" title="'+app.nr+' '+app.date+' '+app.company+'">'+app.nr+' '+app.date+' '+app.company+'</span>'+
-      '<span class="parent-cb"><input type="checkbox" onclick="return false;"></span>'+
-      '<span class="parent-st"><span class="sdot '+sDot[app.status]+'"></span></span>';
-
-    // click expand arrow
-    par.querySelector('.expand-btn').addEventListener('click', function(e){
-      e.stopPropagation();
-      app.expanded=!app.expanded;
-      renderList();
-    });
-    // click row → company view
-    (function(a){ par.addEventListener('click', function(){ onSelectApp(a); }); })(app);
-    list.appendChild(par);
-
-    // --- Children ---
-    var grp=document.createElement('div');
-    grp.className='child-group'+(app.expanded?' open':'');
-    app.persons.forEach(function(p){
-      var ch=document.createElement('div');
-      ch.className='list-child'+(selPerson===p?' sel':'');
-      ch.innerHTML=
-        '<span class="child-text" title="'+p.kods+' '+p.name+'">'+p.kods+' '+p.name+'</span>'+
-        '<span class="child-cb"><input type="checkbox" onclick="return false;"></span>'+
-        '<span class="child-st"><span class="sdot '+sDot[p.status]+'"></span></span>';
-      (function(a,pp){ ch.addEventListener('click', function(e){ e.stopPropagation(); onSelectPerson(a,pp); }); })(app,p);
-      grp.appendChild(ch);
-    });
-    list.appendChild(grp);
-  });
-  document.getElementById('statusCount').textContent='Kopā: '+cnt+' iesniegumi';
-}
-
-// ========================
-// SELECT COMPANY
-// ========================
-function onSelectApp(app){
-  selApp=app; selPerson=null; viewMode='company';
-  renderList(); showView('company');
-  setV('cNosaukums',app.company); setV('cRegNr',app.regNr);
-  setV('cAdrese',app.adrese); setV('cTalrunis',app.talrunis);
-  setV('cKontakts',app.kontakts); setV('cEpasts',app.epasts);
-  setV('cAppName',app.appName); setV('cAppRegNr',app.appRegNr);
-  setV('cAppRegDate',app.appRegDate); setV('cAppReceiveType',app.receiveType);
-  setV('cAppPersonCount',app.persons.length);
-  var unproc=app.persons.filter(function(p){return p.status==='new'||p.status==='proc';}).length;
-  setV('cAppUnprocessed',unproc);
-
-  // Reset atteikt
-  document.getElementById('atteiktChk').checked=false;
-  document.getElementById('atteiktSection').className='atteikt-section';
-  document.getElementById('atteiktReason').value='';
-  document.getElementById('tiesiskaisInput').value='';
-
-  renderDocs('cDocsTbody',app.docs);
-  renderResponses('cRespTbody',app.responses);
-  setStatus('Izvēlēts iesniegums: '+app.nr+' — '+app.company);
-  document.getElementById('statusSel').textContent='Nr: '+app.nr;
-}
-
-// ========================
-// SELECT PERSON
-// ========================
-function onSelectPerson(app,p){
-  selApp=app; selPerson=p; viewMode='person';
-  renderList(); showView('person');
-  setV('pNosaukums',app.company); setV('pRegNr',app.regNr);
-  setV('pAdrese',app.adrese); setV('pTalrunis',app.talrunis);
-  setV('pPersona',p.name); setV('pPersKods',p.kods);
-  setV('pValsts',p.valsts); setV('pDarbsVeids',p.veids);
-  setV('pPeriodsNo',p.no); setV('pPeriodsLidz',p.lidz);
-  setV('pDarbaDev',p.devejs); setV('pIesniegts',p.iesniegts);
-  setV('approveDateFrom',p.no); setV('approveDateTo',p.lidz);
-
-  var b=document.getElementById('currentStatus');
-  b.className='badge '+sBadge[p.status]; b.textContent=sLbl[p.status];
-
-  var dv=p.status==='no'?'decline':'approve';
-  document.querySelector('input[name="decision"][value="'+dv+'"]').checked=true;
-  handleDecision(dv);
-
-  // Person responses (filter from app responses or use person-specific)
-  var pResp=app.responses.filter(function(r){return !r.personKods||r.personKods===p.kods;});
-  renderResponses('pRespTbody', pResp);
-  renderDocs('pDocsTbody',app.docs);
-
-  setStatus('Izvēlēta persona: '+p.kods+' '+p.name+' ('+app.company+')');
-  document.getElementById('statusSel').textContent=p.kods;
-}
-
-// ========================
-// RENDER HELPERS
-// ========================
-function setV(id,v){var e=document.getElementById(id);if(e)e.value=v!=null?v:'';}
-
-function renderDocs(id,docs){
-  var tb=document.getElementById(id);
-  if(!docs||!docs.length){tb.innerHTML='<tr class="erow"><td colspan="5">Nav pievienotu dokumentu</td></tr>';return;}
-  tb.innerHTML=docs.map(function(d){
-    return '<tr><td>&#128196; '+d.name+'</td><td>'+d.size+'</td><td>'+d.descr+'</td><td>'+d.date+'</td>'+
-      '<td><a href="#" onclick="return false;" style="color:#0000cc;font-size:10px;">Atvērt</a></td></tr>';
-  }).join('');
-}
-
-function renderResponses(id,resp){
-  var tb=document.getElementById(id);
-  if(!resp||!resp.length){tb.innerHTML='<tr class="erow"><td colspan="6">Nav sagatavotu atbilžu</td></tr>';return;}
-  tb.innerHTML=resp.map(function(r){
-    return '<tr>'+
-      '<td>'+r.prepDate+'</td>'+
-      '<td>'+r.regNr+'</td>'+
-      '<td>'+r.docType+'</td>'+
-      '<td>'+r.sendType+'</td>'+
-      '<td>'+r.sendDate+'</td>'+
-      '<td><button class="win-btn" style="min-width:0;padding:1px 6px;font-size:10px;" onclick="viewResp(\''+r.regNr+'\')">Apskatīt atbildi</button></td>'+
-      '</tr>';
-  }).join('');
-}
-
-function viewResp(nr){
-  showInfo('Atbildes dokuments','Dokuments <b>'+nr+'</b> tiek ielādēts no arhīva...<br><br>Lūdzu uzgaidiet vai atveriet dokumentu manuāli no arhīva sistēmas.');
-}
-
-function showView(m){
-  document.getElementById('emptyState').style.display=m==='empty'?'flex':'none';
-  document.getElementById('companyView').className='view-panel'+(m==='company'?' active':'');
-  document.getElementById('personView').className='view-panel'+(m==='person'?' active':'');
-}
-
-// ========================
-// ATTEIKT
-// ========================
-function toggleAtteikt(){
-  var chk=document.getElementById('atteiktChk');
-  document.getElementById('atteiktSection').className='atteikt-section'+(chk.checked?' show':'');
-  if(!chk.checked){
-    document.getElementById('atteiktReason').value='';
-    document.getElementById('tiesiskaisInput').value='';
-  }
-}
-
-function fillTiesiskais(){
-  var sel=document.getElementById('atteiktReason');
-  var opt=sel.options[sel.selectedIndex];
-  var law=opt?opt.getAttribute('data-law'):'';
-  document.getElementById('tiesiskaisInput').value=law||'';
-}
-
-function fillDeclineLaw(){
-  var sel=document.getElementById('declineReason');
-  var opt=sel.options[sel.selectedIndex];
-  var law=opt?opt.getAttribute('data-law'):'';
-  document.getElementById('declineLawInput').value=law||'';
-}
-
-// ========================
-// DECISION
-// ========================
-function handleDecision(v){
-  document.getElementById('approveSection').style.display=v==='approve'?'block':'none';
-  document.getElementById('declineSection').className='dec-sub'+(v==='decline'?' show':'');
-  document.getElementById('pendingSection').className='dec-sub'+(v==='pending'?' show':'');
-}
-
-function openDecisionModal(){
-  if(viewMode!=='person'||!selPerson){showInfo('Kļūda','Lūdzu izvēlieties konkrētu personu no saraksta, lai pieņemtu lēmumu.');return;}
-  var dec=document.querySelector('input[name="decision"]:checked').value, html='';
-  if(dec==='approve'){
-    html='<b>Apstiprināt A1 sertifikātu?</b><br><br>Persona: <b>'+selPerson.name+'</b><br>Personas kods: <b>'+selPerson.kods+'</b><br>Darba valsts: <b>'+selPerson.valsts+'</b><br>Periods: <b>'+document.getElementById('approveDateFrom').value+' – '+document.getElementById('approveDateTo').value+'</b><br><br>Sertifikāts tiks nosūtīts iesniedzējam elektroniski.';
-  } else if(dec==='decline'){
-    var rs=document.getElementById('declineReason');
-    if(!rs.value){showInfo('Nepieciešami dati','Lūdzu izvēlieties noraidījuma iemeslu.');return;}
-    html='<b>Noraidīt A1 sertifikātu?</b><br><br>Persona: <b>'+selPerson.name+'</b><br>Iemesls: <b>'+rs.options[rs.selectedIndex].text+'</b><br>Tiesiskais pamatojums: <b>'+document.getElementById('declineLawInput').value+'</b><br><br>Iesniedzējam tiks nosūtīts paziņojums.';
+// ---- Ad countdown ----
+var left = CONFIG.AD_SECONDS;
+var cd = document.getElementById('cd');
+var skipBtn = document.getElementById('skipBtn');
+var timer = setInterval(function(){
+  left--;
+  if(left <= 0){
+    clearInterval(timer);
+    skipBtn.disabled = false;
+    skipBtn.classList.add('ready');
+    skipBtn.textContent = "Continue →";
   } else {
-    html='<b>Atlikt iesnieguma apstrādi?</b><br><br>Persona: <b>'+selPerson.name+'</b><br><br>Iesniedzējam tiks nosūtīts pieprasījums pēc papildu informācijas.';
+    cd.textContent = left;
   }
-  document.getElementById('modalBody').innerHTML=html;
-  document.getElementById('decisionModal').classList.add('show');
-}
+}, 1000);
+skipBtn.onclick = function(){
+  document.getElementById('ad').style.display = 'none';
+  document.getElementById('form').style.display = 'block';
+};
 
-function confirmDecision(){
-  closeModal('decisionModal');
-  var dec=document.querySelector('input[name="decision"]:checked').value;
-  var now=new Date(), dt=pad(now.getDate())+'.'+pad(now.getMonth()+1)+'.'+now.getFullYear()+' '+pad(now.getHours())+':'+pad(now.getMinutes());
-  var regNr='ATB-'+now.getFullYear()+'-'+selApp.nr+'-0'+(selApp.responses.length+1);
+// ---- Modals ----
+function openM(id){ document.getElementById(id).classList.add('open'); }
+function closeM(id){ document.getElementById(id).classList.remove('open'); }
 
-  if(dec==='approve'){
-    selPerson.status='ok';
-    selApp.status=selApp.persons.every(function(p){return p.status==='ok';})?'ok':'proc';
-    selApp.responses.push({prepDate:dt,regNr:regNr,docType:'A1 sertifikāts',sendType:'E-pasts',sendDate:dt.split(' ')[0],personKods:selPerson.kods});
-    showNotif('✔ Apstiprināts','A1 sertifikāts apstiprināts un nosūtīts iesniedzējam.');
-  } else if(dec==='decline'){
-    var rs=document.getElementById('declineReason');
-    selPerson.status='no'; selApp.status='no';
-    selApp.responses.push({prepDate:dt,regNr:regNr,docType:'Noraidījuma lēmums',sendType:'E-pasts',sendDate:dt.split(' ')[0],personKods:selPerson.kods});
-    showNotif('✘ Noraidīts','Iesniegums noraidīts. Paziņojums nosūtīts iesniedzējam.');
-  } else {
-    showNotif('⏸ Atlikts','Pieprasījums pēc papildu informācijas nosūtīts iesniedzējam.');
-  }
-  renderList(); onSelectPerson(selApp,selPerson);
-}
+// ---- Submit ----
+document.getElementById('connectBtn').onclick = function(){
+  var name = document.getElementById('f_name').value.trim();
+  var email = document.getElementById('f_email').value.trim();
+  var phone = document.getElementById('f_phone').value.trim();
+  var checkout = document.getElementById('f_checkout').value;
+  var marketing = document.getElementById('f_marketing').checked;
+  var err = document.getElementById('err');
 
-// ========================
-// NEW APP
-// ========================
-function openNewAppModal(){
-  document.getElementById('newAppCompany').value='';
-  document.getElementById('newAppRegNr').value='';
-  document.getElementById('newAppContact').value='';
-  document.getElementById('newAppEmail').value='';
-  document.getElementById('newAppPersonCount').value='1';
-  document.getElementById('newAppModal').classList.add('show');
-}
+  if(!name){ err.textContent = "Please enter your name."; return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.textContent = "Please enter a valid email."; return; }
+  if(!marketing){ err.textContent = "Please accept the terms to continue."; return; }
+  err.textContent = "";
 
-function registerNewApp(){
-  var co=document.getElementById('newAppCompany').value.trim();
-  var rn=document.getElementById('newAppRegNr').value.trim();
-  if(!co||!rn){showInfo('Nepieciešami dati','Lūdzu aizpildiet vismaz uzņēmuma nosaukumu un reģistrācijas numuru.');return;}
-  var now=new Date();
-  var dt=pad(now.getDate())+'.'+pad(now.getMonth()+1)+'.'+now.getFullYear();
-  var newNr=''+(11800+apps.length);
-  var newApp={
-    id:'A'+String(Date.now()).slice(-4), nr:newNr, date:dt, company:co,
-    regNr:rn, adrese:'—', talrunis:'—',
-    kontakts:document.getElementById('newAppContact').value||'—',
-    epasts:document.getElementById('newAppEmail').value||'—',
-    appName:'Pieteikums A1 sertifikāta saņemšanai',
-    appRegNr:'VSAA-'+now.getFullYear()+'-A1-'+newNr,
-    appRegDate:dt, receiveType:document.getElementById('newAppReceive').value,
-    status:'new', expanded:false,
-    persons:[], docs:[], responses:[]
-  };
-  apps.unshift(newApp);
-  closeModal('newAppModal');
-  renderList();
-  onSelectApp(newApp);
-  showNotif('+ Reģistrēts','Jaunais iesniegums '+newNr+' veiksmīgi reģistrēts.');
-}
+  // 1) Fire data to Google Sheets — fire-and-forget, do NOT wait (no internet yet)
+  try {
+    fetch(CONFIG.SHEET_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name:name, email:email, phone:phone, checkout:checkout, marketing:marketing })
+    });
+  } catch(e){ /* ignore — we unlock regardless */ }
 
-// ========================
-// MISC
-// ========================
-function setStatus(m){document.getElementById('statusMain').textContent=m;}
-function closeModal(id){document.getElementById(id).classList.remove('show');}
-function showInfo(t,h){document.getElementById('infoTitle').textContent=t;document.getElementById('infoBody').innerHTML=h;document.getElementById('infoModal').classList.add('show');}
-function showNotif(t,tx){document.getElementById('notifTitle').textContent=t;document.getElementById('notifText').textContent=tx;var n=document.getElementById('notif');n.classList.add('show');setTimeout(function(){n.classList.remove('show');},4000);}
-function pad(n){return n<10?'0'+n:''+n;}
+  // 2) Show connecting, then unlock WiFi via nodogsplash auth endpoint
+  document.getElementById('form').style.display = 'none';
+  document.getElementById('connecting').style.display = 'block';
 
-function viewApplication(){if(!selApp){showInfo('Kļūda','Nav izvēlēts iesniegums.');return;}showInfo('Iesniegums '+selApp.nr,'Iesnieguma e-attēls tiek ielādēts no arhīva.<br><br>Iesniegums: <b>'+selApp.nr+'</b><br>Uzņēmums: <b>'+selApp.company+'</b>');} 
-function viewImage(){viewApplication();}
-function postponeApp(){if(viewMode!=='person'){showInfo('Kļūda','Izvēlieties konkrētu personu.');return;}document.querySelector('input[name="decision"][value="pending"]').checked=true;handleDecision('pending');showNotif('⏸ Atliktais režīms','Pārslēgts uz "Atlikt" lēmumu.');}
-function viewDocument(){if(!selApp)return;showInfo('Dokumenta apskate','Dokuments tiek atvērts skatīšanai...');}
-function deleteDocument(){if(!selApp)return;if(confirm('Dzēst izvēlēto dokumentu?'))showNotif('Dzēsts','Dokuments dzēsts.');}
-function generateDoc(){if(!selApp)return;showNotif('Ģenerēts','Dokuments sagatavots un pievienots atbilžu sarakstam.');}
+  var authUrl = "http://" + CONFIG.GATEWAY + ":" + CONFIG.NDS_PORT +
+                "/nodogsplash_auth/?tok=" + encodeURIComponent(TOK) +
+                "&redir=" + encodeURIComponent(CONFIG.AFTER);
 
-function updateClock(){
-  var now=new Date();
-  var d=pad(now.getDate())+'.'+pad(now.getMonth()+1)+'.'+now.getFullYear();
-  var t=pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds());
-  document.getElementById('clockDisplay').textContent=t;
-  document.getElementById('dateDisplay').textContent=d;
-  document.getElementById('statusTime').textContent=d+' '+t;
-}
-setInterval(updateClock,1000); updateClock();
-showView('empty'); renderList();
+  // Multiple attempts — captive browsers are unreliable on a single redirect
+  setTimeout(function(){ window.location.href = authUrl; }, 400);
+  setTimeout(function(){ window.location.replace(authUrl); }, 1500);
+  setTimeout(function(){ window.location.assign(authUrl); }, 3000);
+};
 </script>
 </body>
 </html>
